@@ -1,8 +1,11 @@
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -12,37 +15,45 @@ public class SquareGrid {
     private static int dimension;
     private static int cell;
 
-    public SquareGrid() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 3));
+    private boolean start = false;
+    private boolean end = false;
 
-        panel.add(new JButton("button1"));
-        panel.add(new JButton("button2"));
-        panel.add(new JButton("button3"));
-        panel.add(new JButton("button4"));
-        panel.add(new JButton("button5"));
-        panel.add(new JButton("button6"));
-        panel.add(new JButton("button7"));
-        panel.add(new JButton("button8"));
-        panel.add(new JButton("button9"));
-
-        frame.add(panel);
-        frame.setVisible(true);
-        frame.setSize(1000, 1000);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
+    private Point startCoord = new Point();
+    private Point endCoord = new Point();
 
     public SquareGrid(int dimension, int cell) {
 
+        this.cell = cell;
+        this.dimension = dimension;
         final JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(cell, cell));
 
-        List<JButton> buttonList = new ArrayList<JButton>();
         for(int i=0; i<cell; i++) {
             for(int j=0; j<cell; j++) {
                 JButton button = new JButton(i + ", " + j);
-                panel.add(button);
-                buttonList.add(button);
+                button.setName("empty:");
+                int finalI = i;
+                int finalJ = j;
+                button.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!start) {
+                            button.setBackground(new Color(3, 115, 252));
+                            button.setName("start");
+                            startCoord.setLocation(finalI, finalJ);
+                            start = true;
+                        } else if(!end) {
+                            Component[] components = panel.getComponents();
+                            button.setBackground(new Color(245, 138, 66));
+                            button.setName("end");
+                            endCoord.setLocation(finalI, finalJ);
+                            end = true;
+
+                            bruteForcePath(components);
+                        }
+                    }
+                });
+                panel.add(button, panel);
             }
         }
 
@@ -50,6 +61,32 @@ public class SquareGrid {
         frame.setVisible(true);
         frame.setSize(dimension, dimension);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+
+    }
+
+    public void bruteForcePath(Component[] components) {
+        boolean flag = false;
+
+        for(int i=startCoord.x; i<cell; i++) {
+            for(int j=0; j<cell; j++) {
+
+                // We want to be able to start at the "start" button, but not remain there when traversing to end
+                if(!flag) {
+                    j = startCoord.y;
+                    flag = true;
+                }
+                // Calculate corresponding button in components array
+                int index = ( (10 * i) + j );
+                if(components[index].getName().equals("start")) {
+                    continue;
+                }
+                if(components[index].getName().equals("end")) {
+                    return;
+                }
+                components[index].setBackground(new Color(123, 245, 66));
+            }
+        }
     }
 
     public static void main(String[] args) {
