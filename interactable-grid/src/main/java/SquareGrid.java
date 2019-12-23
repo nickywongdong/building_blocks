@@ -32,17 +32,21 @@ public class SquareGrid {
             for(int j=0; j<cell; j++) {
                 JButton button = new JButton(i + ", " + j);
                 button.setName("empty:");
+                button.setOpaque(true);
+                //button.setBorderPainted(false);
                 int finalI = i;
                 int finalJ = j;
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(!start) {
+                            System.out.println("Starting Point Initialized");
                             button.setBackground(new Color(3, 115, 252));
                             button.setName("start");
                             startCoord.setLocation(finalI, finalJ);
                             start = true;
                         } else if(!end) {
+                            System.out.println("Setting End Point");
                             Component[] components = panel.getComponents();
                             button.setBackground(new Color(245, 138, 66));
                             button.setName("end");
@@ -84,6 +88,7 @@ public class SquareGrid {
                 if(components[index].getName().equals("end")) {
                     return;
                 }
+                System.out.println("Setting path component");
                 components[index].setBackground(new Color(123, 245, 66));
             }
         }
