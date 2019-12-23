@@ -1,3 +1,5 @@
+import javafx.geometry.HorizontalDirection;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -12,6 +14,10 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class SquareGrid {
 
     private static final JFrame frame = new JFrame("Square Grid");
+    private static final JSplitPane splitPane = new JSplitPane();
+    private static final JPanel topPanel = new JPanel();
+    private static final JPanel bottomPanel = new JPanel();
+
     private static int dimension;
     private static int cell;
 
@@ -25,13 +31,46 @@ public class SquareGrid {
 
         this.cell = cell;
         this.dimension = dimension;
-        final JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(cell, cell));
+
+        createInitialPanel();
+        createResetPanel();
+
+        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        splitPane.setDividerLocation(600);
+        frame.add(splitPane);
+        frame.setVisible(true);
+        frame.setSize(dimension, dimension);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+
+    }
+
+    public void createResetPanel() {
+        //final JPanel panel = new JPanel();
+        bottomPanel.setLayout(new GridLayout());
+
+        JButton button = new JButton("Reset");
+        button.setName("ResetButton");
+        button.setBackground(Color.white);
+        button.setOpaque(true);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                resetGrid();
+            }
+        });
+        bottomPanel.add(button);
+        splitPane.setBottomComponent(bottomPanel);
+    }
+
+    public void createInitialPanel() {
+        topPanel.setLayout(new GridLayout(cell, cell));
 
         for(int i=0; i<cell; i++) {
             for(int j=0; j<cell; j++) {
                 JButton button = new JButton(i + ", " + j);
                 button.setName("empty:");
+                button.setBackground(Color.white);
                 button.setOpaque(true);
                 //button.setBorderPainted(false);
                 int finalI = i;
@@ -47,7 +86,7 @@ public class SquareGrid {
                             start = true;
                         } else if(!end) {
                             System.out.println("Setting End Point");
-                            Component[] components = panel.getComponents();
+                            Component[] components = topPanel.getComponents();
                             button.setBackground(new Color(245, 138, 66));
                             button.setName("end");
                             endCoord.setLocation(finalI, finalJ);
@@ -57,16 +96,25 @@ public class SquareGrid {
                         }
                     }
                 });
-                panel.add(button, panel);
+                topPanel.add(button);
             }
         }
+        splitPane.setTopComponent(topPanel);
+    }
 
-        frame.add(panel);
-        frame.setVisible(true);
-        frame.setSize(dimension, dimension);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    public void resetGrid() {
+        this.start = false;
+        this.end = false;
 
+        Component[] components = topPanel.getComponents();
 
+        for(int i=0; i<cell; i++) {
+            for(int j=0; j<cell; j++) {
+                // Calculate corresponding button in components array
+                int index = ( (10 * i) + j );
+                components[index].setBackground(Color.white);
+            }
+        }
     }
 
     public void bruteForcePath(Component[] components) {
