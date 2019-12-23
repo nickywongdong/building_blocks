@@ -11,9 +11,8 @@ import java.util.Map;
 
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class SquareGrid {
+public class SquareGrid extends JFrame{
 
-    private static final JFrame frame = new JFrame("Square Grid");
     private static final JSplitPane splitPane = new JSplitPane();
     private static final JPanel topPanel = new JPanel();
     private static final JPanel bottomPanel = new JPanel();
@@ -37,10 +36,10 @@ public class SquareGrid {
 
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
         splitPane.setDividerLocation(600);
-        frame.add(splitPane);
-        frame.setVisible(true);
-        frame.setSize(dimension, dimension);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        add(splitPane);
+        setVisible(true);
+        setSize(dimension, dimension);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
     }
