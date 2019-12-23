@@ -1,15 +1,8 @@
-import javafx.geometry.HorizontalDirection;
-
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class SquareGrid extends JFrame{
 
@@ -40,8 +33,6 @@ public class SquareGrid extends JFrame{
         setVisible(true);
         setSize(dimension, dimension);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-
     }
 
     public void createResetPanel() {
