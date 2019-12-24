@@ -59,7 +59,7 @@ public class SquareGrid extends JFrame{
         for(int i=0; i<cell; i++) {
             for(int j=0; j<cell; j++) {
                 JButton button = new JButton(i + ", " + j);
-                button.setName("empty:");
+                button.setName("empty");
                 button.setBackground(Color.white);
                 button.setOpaque(true);
                 //button.setBorderPainted(false);
@@ -72,17 +72,19 @@ public class SquareGrid extends JFrame{
                             System.out.println("Starting Point Initialized");
                             button.setBackground(new Color(3, 115, 252));
                             button.setName("start");
+                            button.setText("Start");
                             startCoord.setLocation(finalI, finalJ);
                             start = true;
                         } else if(!end) {
                             System.out.println("Setting End Point");
-                            Component[] components = topPanel.getComponents();
                             button.setBackground(new Color(245, 138, 66));
                             button.setName("end");
+                            button.setText("End");
                             endCoord.setLocation(finalI, finalJ);
                             end = true;
 
-                            bruteForcePath(components);
+                            // Display path upon selecting finish point
+                            bruteForcePath();
                         }
                     }
                 });
@@ -100,25 +102,34 @@ public class SquareGrid extends JFrame{
         // Reset coordinate values
         startCoord.setLocation(0, 0);
 
+        // Reset top panel (grid portion)
         Component[] components = topPanel.getComponents();
 
         for(int i=0; i<cell; i++) {
             for(int j=0; j<cell; j++) {
                 // Calculate corresponding button in components array
                 int index = ( (10 * i) + j );
-                // Reset color and name of button
-                components[index].setBackground(Color.white);
-                components[index].setName("empty");
+                // Reset color, name, and text of button
+                if(components[index] instanceof JButton) {
+                    JButton button = (JButton) components[index];
+                    button.setBackground(Color.white);
+                    button.setName("empty");
+                    button.setText(i + ", " + j);
+                } else {
+                    throw new IllegalStateException("Component in grid at: " + i + ", " + j + " was not an instance of JButton");
+                }
             }
         }
     }
 
-    public void bruteForcePath(Component[] components) {
+    public void bruteForcePath() {
+        // Flag used to signify first entry into loops
         boolean flag = false;
+
+        Component[] components = topPanel.getComponents();
 
         for(int i=startCoord.x; i<cell; i++) {
             for(int j=0; j<cell; j++) {
-
                 // We want to be able to start at the "start" button, but not remain there when traversing to end
                 if(!flag) {
                     j = startCoord.y;
@@ -126,14 +137,24 @@ public class SquareGrid extends JFrame{
                 }
                 // Calculate corresponding button in components array
                 int index = ( (10 * i) + j );
-                if(components[index].getName().equals("start")) {
-                    continue;
+
+                // Ensure component is indeed button
+                if(components[index] instanceof JButton) {
+                    JButton button = (JButton) components[index];
+
+                    if(button.getName().equals("start")) {
+                        continue;
+                    }
+                    if(button.getName().equals("end")) {
+                        return;
+                    }
+
+                    System.out.printf("Setting path component at %d, %d\n", i, j);    // Debug Statement
+                    button.setBackground(new Color(123, 245, 66));
+                    button.setText("--");
+                } else {
+                    throw new IllegalStateException("Component in grid at: " + i + ", " + j + " was not an instance of JButton");
                 }
-                if(components[index].getName().equals("end")) {
-                    return;
-                }
-                System.out.printf("Setting path component at %d, %d\n", i, j);
-                components[index].setBackground(new Color(123, 245, 66));
             }
         }
     }
