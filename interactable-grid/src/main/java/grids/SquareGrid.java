@@ -1,10 +1,14 @@
+package grids;
+
+import button_helper.ButtonHelper;
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SquareGrid extends JFrame{
+public class SquareGrid extends JFrame {
 
     private static final JSplitPane splitPane = new JSplitPane();
     private static final JPanel topPanel = new JPanel();
@@ -36,20 +40,20 @@ public class SquareGrid extends JFrame{
     }
 
     public void createResetPanel() {
-        //final JPanel panel = new JPanel();
         bottomPanel.setLayout(new GridLayout());
 
-        JButton button = new JButton("Reset");
-        button.setName("ResetButton");
-        button.setBackground(Color.white);
-        button.setOpaque(true);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                resetGrid();
-            }
-        });
-        bottomPanel.add(button);
+        /* Creating a "Reset" button */
+        JButton resetButton = ButtonHelper.createButton("Reset", "ResetButton",
+                Color.white, () -> { resetGrid(); } );
+
+
+        /* Creating a "Brute Force" button */
+        JButton bruteOptionButton = ButtonHelper.createButton("Brute Force", "BruteForce",
+                Color.white, () -> { bruteForcePath(); } );
+
+
+        bottomPanel.add(resetButton);
+        bottomPanel.add(bruteOptionButton);
         splitPane.setBottomComponent(bottomPanel);
     }
 
@@ -83,8 +87,8 @@ public class SquareGrid extends JFrame{
                             endCoord.setLocation(finalI, finalJ);
                             end = true;
 
-                            // Display path upon selecting finish point
-                            bruteForcePath();
+                            /* Display path upon selecting finish point */
+                            //bruteForcePath();
                         }
                     }
                 });
@@ -95,21 +99,21 @@ public class SquareGrid extends JFrame{
     }
 
     public void resetGrid() {
-        // Reset start and end booleans
+        /* Reset start and end booleans */
         this.start = false;
         this.end = false;
 
-        // Reset coordinate values
+        /* Reset coordinate values */
         startCoord.setLocation(0, 0);
 
-        // Reset top panel (grid portion)
+        /* Reset top panel (grid portion) */
         Component[] components = topPanel.getComponents();
 
         for(int i=0; i<cell; i++) {
             for(int j=0; j<cell; j++) {
-                // Calculate corresponding button in components array
+                /* Calculate corresponding button in components array */
                 int index = ( (10 * i) + j );
-                // Reset color, name, and text of button
+                /* Reset color, name, and text of button */
                 if(components[index] instanceof JButton) {
                     JButton button = (JButton) components[index];
                     button.setBackground(Color.white);
@@ -123,22 +127,22 @@ public class SquareGrid extends JFrame{
     }
 
     public void bruteForcePath() {
-        // Flag used to signify first entry into loops
+        /* Flag used to signify first entry into loops */
         boolean flag = false;
 
         Component[] components = topPanel.getComponents();
 
         for(int i=startCoord.x; i<cell; i++) {
             for(int j=0; j<cell; j++) {
-                // We want to be able to start at the "start" button, but not remain there when traversing to end
+                /* We want to be able to start at the "start" button, but not remain there when traversing to end */
                 if(!flag) {
                     j = startCoord.y;
                     flag = true;
                 }
-                // Calculate corresponding button in components array
+                /* Calculate corresponding button in components array */
                 int index = ( (10 * i) + j );
 
-                // Ensure component is indeed button
+                /* Ensure component is indeed button */
                 if(components[index] instanceof JButton) {
                     JButton button = (JButton) components[index];
 
@@ -160,7 +164,6 @@ public class SquareGrid extends JFrame{
     }
 
     public static void main(String[] args) {
-        //new SquareGrid();
         new SquareGrid(1000, 10);
     }
 }

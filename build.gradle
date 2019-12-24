@@ -1,11 +1,5 @@
 plugins {
-    id 'groovy'
     id 'java'
-    id 'application'
-}
-
-application {
-    mainClassName = 'interactable-grid/src/main/java/SquareGrid.java'
 }
 
 group 'wng'

@@ -1,6 +1,3 @@
 rootProject.name = 'building_blocks'
-include 'node'
-include 'ui'
-include 'example'
 include 'interactable-grid'
 
