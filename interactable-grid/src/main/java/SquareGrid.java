@@ -93,8 +93,12 @@ public class SquareGrid extends JFrame{
     }
 
     public void resetGrid() {
+        // Reset start and end booleans
         this.start = false;
         this.end = false;
+
+        // Reset coordinate values
+        startCoord.setLocation(0, 0);
 
         Component[] components = topPanel.getComponents();
 
@@ -102,7 +106,9 @@ public class SquareGrid extends JFrame{
             for(int j=0; j<cell; j++) {
                 // Calculate corresponding button in components array
                 int index = ( (10 * i) + j );
+                // Reset color and name of button
                 components[index].setBackground(Color.white);
+                components[index].setName("empty");
             }
         }
     }
@@ -126,7 +132,7 @@ public class SquareGrid extends JFrame{
                 if(components[index].getName().equals("end")) {
                     return;
                 }
-                System.out.println("Setting path component");
+                System.out.printf("Setting path component at %d, %d\n", i, j);
                 components[index].setBackground(new Color(123, 245, 66));
             }
         }
