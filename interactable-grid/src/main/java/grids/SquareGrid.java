@@ -39,25 +39,30 @@ public class SquareGrid extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    public void createResetPanel() {
+    private void createResetPanel() {
         bottomPanel.setLayout(new GridLayout());
 
         /* Creating a "Reset" button */
         JButton resetButton = ButtonHelper.createButton("Reset", "ResetButton",
-                Color.white, () -> { resetGrid(); } );
+                Color.white, () -> { resetGrid(); });
 
 
         /* Creating a "Brute Force" button */
         JButton bruteOptionButton = ButtonHelper.createButton("Brute Force", "BruteForce",
-                Color.white, () -> { bruteForcePath(); } );
+                Color.white, () -> { bruteForcePath(); });
 
+        /* Creating an A* Algorithm button */
+        JButton aStarButton = ButtonHelper.createButton("A* Button", "AStarButton",
+                Color.white, () -> { aStarPath(); });
 
         bottomPanel.add(resetButton);
         bottomPanel.add(bruteOptionButton);
+        bottomPanel.add(aStarButton);
+
         splitPane.setBottomComponent(bottomPanel);
     }
 
-    public void createInitialPanel() {
+    private void createInitialPanel() {
         topPanel.setLayout(new GridLayout(cell, cell));
 
         for(int i=0; i<cell; i++) {
@@ -98,7 +103,7 @@ public class SquareGrid extends JFrame {
         splitPane.setTopComponent(topPanel);
     }
 
-    public void resetGrid() {
+    private void resetGrid() {
         /* Reset start and end booleans */
         this.start = false;
         this.end = false;
@@ -126,7 +131,7 @@ public class SquareGrid extends JFrame {
         }
     }
 
-    public void bruteForcePath() {
+    private void bruteForcePath() {
         /* Flag used to signify first entry into loops */
         boolean flag = false;
 
@@ -163,6 +168,9 @@ public class SquareGrid extends JFrame {
         }
     }
 
+    private void aStarPath() {
+
+    }
     public static void main(String[] args) {
         new SquareGrid(1000, 10);
     }
