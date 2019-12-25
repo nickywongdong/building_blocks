@@ -1,3 +1,4 @@
 rootProject.name = 'building_blocks'
 include 'interactable-grid'
+include 'pathfinder'
 

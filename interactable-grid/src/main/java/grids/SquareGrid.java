@@ -10,12 +10,19 @@ import java.awt.event.ActionListener;
 
 public class SquareGrid extends JFrame {
 
+    private static final JSplitPane mainSplitPane = new JSplitPane();
     private static final JSplitPane splitPane = new JSplitPane();
+    /* Panel containing overall grid */
     private static final JPanel topPanel = new JPanel();
+    /* Panel consisting of buttons available to press */
     private static final JPanel bottomPanel = new JPanel();
+    /* Panel displaying path found and description */
+    private static final JPanel infoPanel = new JPanel();
 
     private static int dimension;
     private static int cell;
+
+    private int pathLength;
 
     private boolean start = false;
     private boolean end = false;
@@ -27,25 +34,39 @@ public class SquareGrid extends JFrame {
 
         this.cell = cell;
         this.dimension = dimension;
+        pathLength = 0;
 
-        createInitialPanel();
-        createResetPanel();
+        createGridPanel();
+        createOptionsPanel();
+        createInfoPanel();
 
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setDividerLocation(600);
-        add(splitPane);
+        splitPane.setDividerLocation(550);
+
+        // Add splitPane to the main splitpane as top element
+        mainSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        mainSplitPane.setDividerLocation(650);
+        mainSplitPane.setTopComponent(splitPane);
+        add(mainSplitPane);
+
         setVisible(true);
         setSize(dimension, dimension);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void createResetPanel() {
+    private void createInfoPanel() {
+        infoPanel.add(new JLabel("Project Utilizing Path Finding Algorithms"));
+
+        infoPanel.setSize(300, 300);
+        mainSplitPane.setBottomComponent(infoPanel);
+    }
+
+    private void createOptionsPanel() {
         bottomPanel.setLayout(new GridLayout());
 
         /* Creating a "Reset" button */
         JButton resetButton = ButtonHelper.createButton("Reset", "ResetButton",
                 Color.white, () -> { resetGrid(); });
-
 
         /* Creating a "Brute Force" button */
         JButton bruteOptionButton = ButtonHelper.createButton("Brute Force", "BruteForce",
@@ -62,7 +83,7 @@ public class SquareGrid extends JFrame {
         splitPane.setBottomComponent(bottomPanel);
     }
 
-    private void createInitialPanel() {
+    private void createGridPanel() {
         topPanel.setLayout(new GridLayout(cell, cell));
 
         for(int i=0; i<cell; i++) {
@@ -108,6 +129,8 @@ public class SquareGrid extends JFrame {
         this.start = false;
         this.end = false;
 
+        /* Reset path length variable */
+        this.pathLength = 0;
         /* Reset coordinate values */
         startCoord.setLocation(0, 0);
 
@@ -151,6 +174,7 @@ public class SquareGrid extends JFrame {
                 if(components[index] instanceof JButton) {
                     JButton button = (JButton) components[index];
 
+                    pathLength++;
                     if(button.getName().equals("start")) {
                         continue;
                     }
@@ -171,6 +195,7 @@ public class SquareGrid extends JFrame {
     private void aStarPath() {
 
     }
+
     public static void main(String[] args) {
         new SquareGrid(1000, 10);
     }
