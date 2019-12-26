@@ -19,6 +19,8 @@ public class SquareGrid extends JFrame {
     /* Panel displaying path found and description */
     private static final JPanel infoPanel = new JPanel();
 
+    private JLabel pathDisplay = new JLabel();
+
     private static int dimension;
     private static int cell;
 
@@ -43,7 +45,7 @@ public class SquareGrid extends JFrame {
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
         splitPane.setDividerLocation(550);
 
-        // Add splitPane to the main splitpane as top element
+        /* Add splitPane to the main splitpane as top element */
         mainSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSplitPane.setDividerLocation(650);
         mainSplitPane.setTopComponent(splitPane);
@@ -55,7 +57,8 @@ public class SquareGrid extends JFrame {
     }
 
     private void createInfoPanel() {
-        infoPanel.add(new JLabel("Project Utilizing Path Finding Algorithms"));
+        pathDisplay.setText("Project Utilizing Path Finding Algorithms");
+        infoPanel.add(pathDisplay);
 
         infoPanel.setSize(300, 300);
         mainSplitPane.setBottomComponent(infoPanel);
@@ -92,7 +95,7 @@ public class SquareGrid extends JFrame {
                 button.setName("empty");
                 button.setBackground(Color.white);
                 button.setOpaque(true);
-                //button.setBorderPainted(false);
+                /* button.setBorderPainted(false); */
                 int finalI = i;
                 int finalJ = j;
                 button.addActionListener(new ActionListener() {
@@ -113,8 +116,6 @@ public class SquareGrid extends JFrame {
                             endCoord.setLocation(finalI, finalJ);
                             end = true;
 
-                            /* Display path upon selecting finish point */
-                            //bruteForcePath();
                         }
                     }
                 });
@@ -129,6 +130,8 @@ public class SquareGrid extends JFrame {
         this.start = false;
         this.end = false;
 
+        /* Setting path's display back */
+        pathDisplay.setText("Project Utilizing Path Finding Algorithms");
         /* Reset path length variable */
         this.pathLength = 0;
         /* Reset coordinate values */
@@ -174,17 +177,18 @@ public class SquareGrid extends JFrame {
                 if(components[index] instanceof JButton) {
                     JButton button = (JButton) components[index];
 
-                    pathLength++;
                     if(button.getName().equals("start")) {
                         continue;
                     }
                     if(button.getName().equals("end")) {
+                        pathDisplay.setText("Brute Force Option, Length of Path: " + pathLength);
                         return;
                     }
 
-                    System.out.printf("Setting path component at %d, %d\n", i, j);    // Debug Statement
+                    //System.out.printf("Setting path component at %d, %d\n", i, j);    // Debug Statement
                     button.setBackground(new Color(123, 245, 66));
                     button.setText("--");
+                    pathLength++;
                 } else {
                     throw new IllegalStateException("Component in grid at: " + i + ", " + j + " was not an instance of JButton");
                 }
